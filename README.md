@@ -1,5 +1,5 @@
-# tmpl
+# timagineer.com
 
-description
+timagineer.com
 
-[tmpl.timagineer.com](https://tmpl.timagineer.com)
+[timagineer.com](https://timagineer.com)
