@@ -1,3 +1,43 @@
+<!--
+The config object is the control panel for the mouse avoidance effect. Each property controls a different aspect of the physics and behavior:
+
+repelForce: This controls how strongly letters push away from your mouse. Higher values = more dramatic repulsion.
+
+30 = subtle movement
+100 = letters fly away aggressively
+10 = barely noticeable movement
+
+returnForce: This is the "spring strength" that pulls letters back to their home position. It's like a rubber band effect.
+
+0.1 = gentle return
+0.3 = snappy return, letters bounce back quickly
+0.05 = slow, lazy return
+
+damping: This is like friction or air resistance - it slows down movement over time to prevent endless bouncing.
+
+0.8 = moderate damping
+0.95 = very little damping, letters wobble longer
+0.5 = heavy damping, movement stops quickly
+
+maxDistance: This sets the maximum distance (in pixels) that letters can move from their original position. It keeps the text readable.
+
+25 = subtle movement
+50 = letters can move much further
+10 = very constrained movement
+
+detectionRadius: This is the "bubble" around your mouse cursor where letters start reacting.
+
+100 = letters react when mouse is 100px away
+200 = larger detection area, letters react from further away
+50 = you have to get very close before letters move
+
+The Physics Chain:
+
+Mouse enters detectionRadius -> repelForce pushes letters away
+returnForce constantly pulls them back home
+damping slows everything down to prevent chaos
+maxDistance caps how far they can go
+-->
 <!doctype html>
 <html lang="en">
 
@@ -15,8 +55,8 @@
 
         :root {
             color-scheme: light dark;
-            --color-wb: light-dark(white, black);
-            --color-bw: light-dark(black, white);
+            --color-wb: light-dark(hsl(0, 0%, 98%), hsl(0, 0%, 4%));
+            --color-bw: light-dark(hsl(0, 0%, 4%), hsl(0, 0%, 98%));
             font-family: ui-monospace, monospace;
         }
 
@@ -44,13 +84,11 @@
             display: inline-block;
             opacity: 1;
             position: relative;
-            /* transition: color 360ms cubic-bezier(0.445, 0.05, 0.55, 0.95); */
             transition: opacity 240ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
         }
 
         b:hover {
-            /* color: var(--color-wb); */
-            opacity: .3;
+            opacity: .25;
         }
     </style>
     <meta name="mobile-web-app-capable" content="yes">
@@ -75,11 +113,11 @@
             this.letters = [];
             this.animationId = null;
             this.config = {
-                repelForce: 30,
-                returnForce: 0.1,
-                damping: 0.8,
-                maxDistance: 25,
-                detectionRadius: 100
+                repelForce: 100,
+                returnForce: 0.3,
+                damping: 0.75,
+                maxDistance: 50,
+                detectionRadius: 200
             };
 
             this.init();
