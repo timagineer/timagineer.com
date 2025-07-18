@@ -7,25 +7,50 @@
     <title>timagineer.com</title>
     <style>
         * {
+            box-sizing: border-box;
+            line-height: 1;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            user-select: none;
         }
 
         :root {
             color-scheme: light dark;
+            --color-wb: light-dark(white, black);
+            --color-bw: light-dark(black, white);
             font-family: ui-monospace, monospace;
         }
 
         html {
-            min-block-size: 100svh
+            min-block-size: 100svh;
         }
 
         body {
+            background-color: var(--color-wb);
+            color: var(--color-bw);
             display: grid;
             place-items: center;
-            min-block-size: 100svh
+            min-block-size: 100svh;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 1.2383rem + 3.8086vw, 4.666rem);
+            user-select: none;
+            position: relative;
+        }
+
+        b {
+            cursor: pointer;
+            display: inline-block;
+            opacity: 1;
+            position: relative;
+            /* transition: color 360ms cubic-bezier(0.445, 0.05, 0.55, 0.95); */
+            transition: opacity 240ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        }
+
+        b:hover {
+            /* color: var(--color-wb); */
+            opacity: .3;
         }
     </style>
     <meta name="mobile-web-app-capable" content="yes">
@@ -39,29 +64,111 @@
 </head>
 
 <body>
-    <h1 id="cant-touch-this"><a href="https://timagineer.com">timagineer.com</a></h1>
+    <h1>
+        <b>t</b><b>i</b><b>m</b><b>a</b><b>g</b><b>i</b><b>n</b><b>e</b><b>e</b><b>r</b><b>.</b><b>c</b><b>o</b><b>m</b>
+    </h1>
 </body>
-<script>const button = document.getElementById("cant-touch-this");
+<script>
+    class MouseAvoidance {
+        constructor() {
+            this.mouse = { x: 0, y: 0 };
+            this.letters = [];
+            this.animationId = null;
+            this.config = {
+                repelForce: 30,
+                returnForce: 0.1,
+                damping: 0.8,
+                maxDistance: 25,
+                detectionRadius: 100
+            };
 
-    const animateMove = (element, prop, pixels) =>
-        anime({
-            targets: element,
-            [prop]: `${pixels}px`,
-            easing: "easeOutCirc"
-        });
+            this.init();
+        }
 
-    ["mouseover", "click"].forEach(function (el) {
-        button.addEventListener(el, function (event) {
-            const top = getRandomNumber(window.innerHeight - this.offsetHeight);
-            const left = getRandomNumber(window.innerWidth - this.offsetWidth);
+        init() {
+            this.setupLetters();
+            this.bindEvents();
+            this.animate();
+        }
 
-            animateMove(this, "left", left).play();
-            animateMove(this, "top", top).play();
-        });
-    });
+        setupLetters() {
+            const letters = document.querySelectorAll('b');
+            letters.forEach(el => {
+                const letter = {
+                    element: el,
+                    x: 0,
+                    y: 0,
+                    vx: 0,
+                    vy: 0
+                };
 
-    const getRandomNumber = (num) => {
-        return Math.floor(Math.random() * (num + 1));
-    };
-    </script>
+                el.style.position = 'relative';
+                el.style.display = 'inline-block';
+                this.letters.push(letter);
+            });
+        }
+
+        bindEvents() {
+            document.addEventListener('mousemove', e => {
+                this.mouse.x = e.clientX;
+                this.mouse.y = e.clientY;
+            });
+
+            window.addEventListener('beforeunload', () => {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                }
+            });
+        }
+
+        updateLetter(letter) {
+            const rect = letter.element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const dx = this.mouse.x - centerX;
+            const dy = this.mouse.y - centerY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            // Apply repelling force if mouse is close
+            if (distance < this.config.detectionRadius && distance > 0) {
+                const force = this.config.repelForce / (distance * distance);
+                letter.vx -= (dx / distance) * force;
+                letter.vy -= (dy / distance) * force;
+            }
+
+            // Apply return force to home position
+            letter.vx += -letter.x * this.config.returnForce;
+            letter.vy += -letter.y * this.config.returnForce;
+
+            // Apply damping
+            letter.vx *= this.config.damping;
+            letter.vy *= this.config.damping;
+
+            // Update position
+            letter.x += letter.vx;
+            letter.y += letter.vy;
+
+            // Limit movement distance
+            const currentDistance = Math.sqrt(letter.x * letter.x + letter.y * letter.y);
+            if (currentDistance > this.config.maxDistance) {
+                const scale = this.config.maxDistance / currentDistance;
+                letter.x *= scale;
+                letter.y *= scale;
+            }
+
+            // Apply transform
+            letter.element.style.transform = `translate(${letter.x}px, ${letter.y}px)`;
+        }
+
+        animate() {
+            this.letters.forEach(letter => this.updateLetter(letter));
+            this.animationId = requestAnimationFrame(() => this.animate());
+        }
+    }
+
+    // Initialize when DOM is ready
+    new MouseAvoidance();
+</script>
+
 </html>
