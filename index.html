@@ -55,9 +55,9 @@ maxDistance caps how far they can go
 
         :root {
             color-scheme: light dark;
-            --color-wb: light-dark(hsl(0, 0%, 89%), hsl(0, 0%, 6%));
-            --color-bw: light-dark(hsl(0, 0%, 14%), hsl(0, 0%, 99%));
-            --color-o: oklch(0.678 0.2673 34.94);
+            --color-background: light-dark(hsl(0, 0%, 99%), hsl(0, 0%, 4%));
+            --color-foreground: light-dark(hsl(0, 0%, 14%), hsl(0, 0%, 94%));
+            --color-brand: oklch(0.678 0.2673 34.94);
             font-family: ui-monospace, monospace;
         }
 
@@ -66,8 +66,8 @@ maxDistance caps how far they can go
         }
 
         body {
-            background-color: var(--color-wb);
-            color: var(--color-bw);
+            background-color: var(--color-background);
+            color: var(--color-foreground);
             display: grid;
             place-items: center;
             min-block-size: 100svh;
@@ -89,7 +89,7 @@ maxDistance caps how far they can go
 
         b:hover {
             color: #ff4500;
-            color: var(--color-o);
+            color: var(--color-brand);
         }
     </style>
     <meta name="mobile-web-app-capable" content="yes">
