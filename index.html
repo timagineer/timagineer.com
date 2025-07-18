@@ -68,8 +68,9 @@ maxDistance caps how far they can go
         body {
             background-color: var(--color-background);
             color: var(--color-foreground);
-            display: grid;
-            place-items: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             min-block-size: 100svh;
             overflow: hidden;
         }
@@ -85,6 +86,13 @@ maxDistance caps how far they can go
             display: inline-block;
             position: relative;
             transition: color 240ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+            opacity: 0;
+            transform: translate(0, 0);
+            color: var(--color-brand);
+        }
+
+        b.loaded {
+            color: var(--color-foreground);
         }
 
         b:hover {
@@ -132,7 +140,7 @@ maxDistance caps how far they can go
 
         setupLetters() {
             const letters = document.querySelectorAll('b');
-            letters.forEach(el => {
+            letters.forEach((el, index) => {
                 const letter = {
                     element: el,
                     x: 0,
@@ -144,7 +152,38 @@ maxDistance caps how far they can go
                 el.style.position = 'relative';
                 el.style.display = 'inline-block';
                 this.letters.push(letter);
+
+                // Start letters scattered and animate them into place
+                this.animateLetterIn(letter, index);
             });
+        }
+
+        animateLetterIn(letter, index) {
+            // Random starting position (scattered within detection radius)
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * this.config.detectionRadius * 0.8; // Stay within physics range
+            const startX = Math.cos(angle) * distance;
+            const startY = Math.sin(angle) * distance;
+
+            // Set initial scattered position
+            letter.x = startX;
+            letter.y = startY;
+            letter.element.style.transform = `translate(${startX}px, ${startY}px)`;
+            letter.element.style.opacity = '1';
+
+            // Animate to home position with minimal staggering
+            setTimeout(() => {
+                letter.element.style.transition = 'transform 360ms cubic-bezier(0.25, 0.46, 0.45, 0.94), color 360ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                letter.element.style.transform = 'translate(0px, 0px)';
+                letter.x = 0;
+                letter.y = 0;
+
+                // Add loaded class to trigger color change via CSS
+                setTimeout(() => {
+                    letter.element.classList.add('loaded');
+                    letter.element.style.transition = 'color 240ms cubic-bezier(0.445, 0.05, 0.55, 0.95)';
+                }, 360);
+            }, index * 15); // Much less staggering
         }
 
         bindEvents() {
