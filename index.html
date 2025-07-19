@@ -1,38 +1,13 @@
 <!--
 The config object is the control panel for the mouse avoidance effect. Each property controls a different aspect of the physics and behavior:
 
-repelForce: This controls how strongly letters push away from your mouse. Higher values = more dramatic repulsion.
-
-30 = subtle movement
-100 = letters fly away aggressively
-10 = barely noticeable movement
-
-returnForce: This is the "spring strength" that pulls letters back to their home position. It's like a rubber band effect.
-
-0.1 = gentle return
-0.3 = snappy return, letters bounce back quickly
-0.05 = slow, lazy return
-
-damping: This is like friction or air resistance - it slows down movement over time to prevent endless bouncing.
-
-0.8 = moderate damping
-0.95 = very little damping, letters wobble longer
-0.5 = heavy damping, movement stops quickly
-
-maxDistance: This sets the maximum distance (in pixels) that letters can move from their original position. It keeps the text readable.
-
-25 = subtle movement
-50 = letters can move much further
-10 = very constrained movement
-
-detectionRadius: This is the "bubble" around your mouse cursor where letters start reacting.
-
-100 = letters react when mouse is 100px away
-200 = larger detection area, letters react from further away
-50 = you have to get very close before letters move
+- repelForce: This controls how strongly letters push away from your mouse. Higher values = more dramatic repulsion.
+- returnForce: This is the "spring strength" that pulls letters back to their home position. It's like a rubber band effect.
+- damping: This is like friction or air resistance - it slows down movement over time to prevent endless bouncing.
+- maxDistance: This sets the maximum distance (in pixels) that letters can move from their original position. It keeps the text readable.
+- detectionRadius: This is the "bubble" around your mouse cursor where letters start reacting.
 
 The Physics Chain:
-
 Mouse enters detectionRadius -> repelForce pushes letters away
 returnForce constantly pulls them back home
 damping slows everything down to prevent chaos
@@ -54,8 +29,8 @@ maxDistance caps how far they can go
 
         :root {
             color-scheme: light dark;
-            --color-background: light-dark(hsl(0, 0%, 99%), hsl(0, 0%, 4%));
-            --color-foreground: light-dark(hsl(0, 0%, 14%), hsl(0, 0%, 94%));
+            --color-background: light-dark(hsl(0, 0%, 99%), hsl(0, 0%, 6%));
+            --color-foreground: light-dark(hsl(0, 0%, 21%), hsl(0, 0%, 91%));
             --color-brand: oklch(0.678 0.2673 34.94);
             font-family: ui-monospace, monospace;
         }
@@ -122,11 +97,11 @@ maxDistance caps how far they can go
             this.letters = [];
             this.animationId = null;
             this.config = {
-                repelForce: 10000,
-                returnForce: 0.4,
-                damping: 0.1,
-                maxDistance: 500,
-                detectionRadius: 5000
+                repelForce: 10000, // 1000-50000
+                returnForce: 0.4, // 0.05-1.00
+                damping: 0.1, // 0.05-0.95
+                maxDistance: 500, //10px-1000px
+                detectionRadius: 5000 // 50px-10000px
             };
 
             this.init();
