@@ -31,7 +31,7 @@ maxDistance caps how far they can go
             color-scheme: light dark;
             --color-background: light-dark(hsl(0, 0%, 99%), hsl(0, 0%, 6%));
             --color-foreground: light-dark(hsl(0, 0%, 21%), hsl(0, 0%, 91%));
-            --color-brand: oklch(0.678 0.2673 34.94);
+            --color-accent: oklch(0.678 0.2673 34.94);
             font-family: ui-monospace, monospace;
         }
 
@@ -67,19 +67,19 @@ maxDistance caps how far they can go
 
         b:not(.loaded) {
             color: #ff4500;
-            color: var(--color-brand);
+            color: var(--color-accent);
         }
 
         b.loaded:hover {
             color: #ff4500;
-            color: var(--color-brand);
+            color: var(--color-accent);
         }
     </style>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="view-transition" content="same-origin">
-    <meta name="theme-color" media="(prefers-color-scheme:light)" content="#fff">
-    <meta name="theme-color" media="(prefers-color-scheme:dark)" content="#000">
+    <meta name="theme-color" media="(prefers-color-scheme:light)" content="#fcfcfc">
+    <meta name="theme-color" media="(prefers-color-scheme:dark)" content="#0f0f0f">
     <meta name="color-scheme" content="light dark">
     <meta name="author" content="Timothy Martens">
     <meta name="description" content="Timothy Martens—product design technologist">
@@ -90,6 +90,7 @@ maxDistance caps how far they can go
         <b>t</b><b>i</b><b>m</b><b>a</b><b>g</b><b>i</b><b>n</b><b>e</b><b>e</b><b>r</b><b>.</b><b>c</b><b>o</b><b>m</b>
     </h1>
 </body>
+
 <script>
     class MouseAvoidance {
         constructor() {
@@ -97,10 +98,10 @@ maxDistance caps how far they can go
             this.letters = [];
             this.animationId = null;
             this.config = {
-                repelForce: 10000, // 1000-50000
-                returnForce: 0.4, // 0.05-1.00
-                damping: 0.1, // 0.05-0.95
-                maxDistance: 500, //10px-1000px
+                repelForce: 20000, // 1000-50000
+                returnForce: 0.1, // 0.05-1.00
+                damping: 0.6, // 0.05-0.95
+                maxDistance: 900, //10px-1000px
                 detectionRadius: 5000 // 50px-10000px
             };
 
