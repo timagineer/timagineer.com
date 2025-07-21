@@ -31,6 +31,7 @@ maxDistance caps how far they can go
             color-scheme: light dark;
             --color-background: light-dark(hsl(0, 0%, 99%), hsl(0, 0%, 6%));
             --color-foreground: light-dark(hsl(0, 0%, 21%), hsl(0, 0%, 91%));
+            --color-accent: #ff4500;
             --color-accent: oklch(0.678 0.2673 34.94);
             font-family: ui-monospace, monospace;
         }
@@ -40,13 +41,25 @@ maxDistance caps how far they can go
         }
 
         body {
-            background-color: var(--color-background);
+            --dot-grid-background: var(--color-background);
+            --dot-grid-color: var(--color-foreground);
+            --dot-grid-size: 0.5px;
+            --dot-grid-space: 42px;
+            background:
+                linear-gradient(90deg, var(--dot-grid-background) calc(var(--dot-grid-space) - var(--dot-grid-size)), transparent 1%) center / var(--dot-grid-space) var(--dot-grid-space),
+                linear-gradient(var(--dot-grid-background) calc(var(--dot-grid-space) - var(--dot-grid-size)), transparent 1%) center / var(--dot-grid-space) var(--dot-grid-space), var(--dot-grid-color);
             color: var(--color-foreground);
             display: flex;
             align-items: center;
             justify-content: center;
             min-block-size: 100svh;
             overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: light) {
+            body {
+                --dot-grid-size: 1.5px
+            }
         }
 
         h1 {
@@ -66,12 +79,10 @@ maxDistance caps how far they can go
         }
 
         b:not(.loaded) {
-            color: #ff4500;
             color: var(--color-accent);
         }
 
         b.loaded:hover {
-            color: #ff4500;
             color: var(--color-accent);
         }
     </style>
